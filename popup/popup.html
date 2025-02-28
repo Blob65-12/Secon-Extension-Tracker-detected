@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Трекер Приватности</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="logo-container">
+                <img src="../assets/icon.png" alt="Логотип" class="logo-img">
+                <h1>Трекер Приватности</h1>
+            </div>
+            <div class="toggle-container">
+                <span class="status-indicator"></span>
+                <button id="toggle" class="toggle-button">
+                    <span class="toggle-text">Включить</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="tabs-container">
+            <div class="tab active" data-tab="overview">
+                <span class="material-icons">dashboard</span>
+                <span>Обзор</span>
+            </div>
+            <div class="tab" data-tab="tracking">
+                <span class="material-icons">visibility</span>
+                <span>Трекинг</span>
+            </div>
+            <div class="tab" data-tab="blocking">
+                <span class="material-icons">block</span>
+                <span>Блокировка</span>
+            </div>
+            <div class="tab" data-tab="stats">
+                <span class="material-icons">analytics</span>
+                <span>Статистика</span>
+            </div>
+        </div>
+        
+        <main class="tab-content-container">
+            <!-- Вкладка обзора -->
+            <section id="overview-tab" class="tab-content active">
+                <div class="overview-card">
+                    <div class="site-info">
+                        <h2 id="currentDomain">Текущий сайт</h2>
+                        <div class="site-status">
+                            <div class="privacy-score">
+                                <div class="score-circle" id="privacyScoreIndicator">?</div>
+                                <div class="score-label">
+                                    <span>Оценка приватности</span>
+                                    <span id="privacyScoreText">Загрузка...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-stats">
+                        <div class="stat-item">
+                            <span class="material-icons">cookie</span>
+                            <div class="stat-details">
+                                <span class="stat-value" id="cookiesCount">0</span>
+                                <span class="stat-label">Куки</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="material-icons">track_changes</span>
+                            <div class="stat-details">
+                                <span class="stat-value" id="trackersCount">0</span>
+                                <span class="stat-label">Трекеры</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="material-icons">sync</span>
+                            <div class="stat-details">
+                                <span class="stat-value" id="requestsCount">0</span>
+                                <span class="stat-label">Запросы</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="site-compliance">
+                        <h3>Соответствие требованиям 149-ФЗ</h3>
+                        <div class="compliance-item">
+                            <span class="material-icons" id="noticeIndicator">check_circle</span>
+                            <span id="noticeText">Уведомление о сборе данных</span>
+                        </div>
+                        <div class="compliance-item">
+                            <span class="material-icons" id="recommendationIndicator">check_circle</span>
+                            <span id="recommendationText">Информация о рекомендательных алгоритмах</span>
+                        </div>
+                        <div class="compliance-item">
+                            <span class="material-icons" id="optOutIndicator">check_circle</span>
+                            <span id="optOutText">Возможность отключения</span>
+                        </div>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <button id="blockAll" class="action-button block-all">
+                            <span class="material-icons">security</span>
+                            <span>Блокировать всё</span>
+                        </button>
+                        <button id="showDetails" class="action-button show-details">
+                            <span class="material-icons">info</span>
+                            <span>Детали</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Вкладка трекинга -->
+            <section id="tracking-tab" class="tab-content">
+                <div class="section-header">
+                    <h2>Отслеживаемые данные</h2>
+                    <span class="last-update" id="lastUpdateTime">Загрузка...</span>
+                </div>
+                
+                <div class="data-section">
+                    <h3>Ваша информация</h3>
+                    <table class="data-table">
+                        <tbody>
+                            <tr>
+                                <td>IP-адрес:</td>
+                                <td id="ip" class="data-value">Загрузка...</td>
+                                <td class="collection-status" id="ipCollectionStatus">?</td>
+                            </tr>
+                            <tr>
+                                <td>Геолокация:</td>
+                                <td id="geolocation" class="data-value">Загрузка...</td>
+                                <td class="collection-status" id="geoCollectionStatus">?</td>
+                            </tr>
+                            <tr>
+                                <td>User-Agent:</td>
+                                <td id="userAgent" class="data-value">Загрузка...</td>
+                                <td class="collection-status" id="uaCollectionStatus">?</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="data-section">
+                    <div class="section-header-with-action">
+                        <h3>Cookies</h3>
+                        <button id="blockCookies" class="small-action-button">Блокировать</button>
+                    </div>
+                    <div id="cookies" class="data-list cookies-list">Загрузка...</div>
+                </div>
+                
+                <div class="data-section">
+                    <div class="section-header-with-action">
+                        <h3>Трекеры</h3>
+                        <button id="blockTrackers" class="small-action-button">Блокировать</button>
+                    </div>
+                    <div id="trackers" class="data-list trackers-list">Загрузка...</div>
+                </div>
+                
+                <div class="data-section collapsible">
+                    <div class="collapsible-header">
+                        <h3>HTTP-запросы</h3>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="section-header-with-action">
+                            <span class="small-heading">Последние запросы</span>
+                            <button id="blockRequests" class="small-action-button">Блокировать</button>
+                        </div>
+                        <div id="requestsList" class="data-list requests-list">Загрузка...</div>
+                    </div>
+                </div>
+                
+                <div class="data-section collapsible">
+                    <div class="collapsible-header">
+                        <h3>WebSocket</h3>
+                        <span class="material-icons">expand_more</span>
+                    </div>
+                    <div class="collapsible-content">
+                        <div class="section-header-with-action">
+                            <span class="small-heading">Соединения</span>
+                            <button id="blockWebsockets" class="small-action-button">Блокировать</button>
+                        </div>
+                        <div id="websocketsList" class="data-list websockets-list">Загрузка...</div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="blocking-tab" class="tab-content">
+    <div class="section-header">
+        <h2>Настройки блокировки</h2>
+    </div>
+    
+    <div class="blocking-switches">
+        <div class="switch-item">
+            <div class="switch-info">
+                <span class="material-icons">cookie</span>
+                <div class="switch-details">
+                    <span class="switch-label">Все cookies</span>
+                    <span class="switch-description">Блокировать все файлы cookie на сайтах</span>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="cookiesSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        
+        <div class="switch-item">
+            <div class="switch-info">
+                <span class="material-icons">cookie</span>
+                <div class="switch-details">
+                    <span class="switch-label">Сторонние cookies</span>
+                    <span class="switch-description">Блокировать только cookies третьих сторон</span>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="thirdPartyCookiesSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        
+        <div class="switch-item">
+            <div class="switch-info">
+                <span class="material-icons">track_changes</span>
+                <div class="switch-details">
+                    <span class="switch-label">Трекеры и аналитика</span>
+                    <span class="switch-description">Блокировать известные трекеры и аналитические скрипты</span>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="trackersSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        
+        <div class="switch-item">
+            <div class="switch-info">
+                <span class="material-icons">sync</span>
+                <div class="switch-details">
+                    <span class="switch-label">XHR-запросы</span>
+                    <span class="switch-description">Блокировать фоновые HTTP-запросы с сайтов</span>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="requestsSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        
+        <div class="switch-item">
+            <div class="switch-info">
+                <span class="material-icons">lan</span>
+                <div class="switch-details">
+                    <span class="switch-label">WebSocket</span>
+                    <span class="switch-description">Блокировать WebSocket-соединения</span>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="websocketsSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        
+        <div class="switch-item">
+            <div class="switch-info">
+                <span class="material-icons">fingerprint</span>
+                <div class="switch-details">
+                    <span class="switch-label">Защита от Fingerprinting</span>
+                    <span class="switch-description">Предотвращать создание цифрового отпечатка браузера</span>
+                </div>
+            </div>
+            <label class="switch">
+                <input type="checkbox" id="fingerprintingSwitch">
+                <span class="slider round"></span>
+            </label>
+        </div>
+    </div>
+    
+    <div class="domain-management">
+        <div class="section-header-with-action">
+            <h3>Управление доменами</h3>
+            <button id="openDomainManager" class="small-action-button">Управление</button>
+        </div>
+        
+        <div class="current-domain-actions">
+            <div class="current-domain-info">
+    <h3>Текущий домен: <span id="currentDomainBlock">...</span></h3>
+    <div class="domain-buttons">
+        <button id="blockDomain" class="button-block">Заблокировать</button>
+        <button id="allowDomain" class="button-allow">Разрешить</button>
+    </div>
+</div>
+    </div>
+</section>
+            
+            <section id="stats-tab" class="tab-content">
+    <div class="section-header">
+        <h2>Статистика</h2>
+        <div class="period-selector">
+            <button data-period="day" class="period-button active">День</button>
+            <button data-period="week" class="period-button">Неделя</button>
+            <button data-period="month" class="period-button">Месяц</button>
+        </div>
+    </div>
+    
+    <div class="stats-summary">
+        <div class="summary-card">
+            <span class="summary-value" id="totalTrackersBlocked">0</span>
+            <span class="summary-label">Трекеры</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-value" id="totalCookiesDetected">0</span>
+            <span class="summary-label">Cookies</span>
+        </div>
+        <div class="summary-card">
+            <span class="summary-value" id="totalSitesVisited">0</span>
+            <span class="summary-label">Сайты</span>
+        </div>
+    </div>
+    
+    <div class="chart-container">
+        <h3>Активность трекеров</h3>
+        <div class="chart-wrapper">
+            <canvas id="trackingChart" width="400" height="200"></canvas>
+        </div>
+        <div class="chart-controls">
+            <div class="slider-control">
+                <label for="xSlider">Время:</label>
+                <input type="range" id="xSlider" min="0" max="59" value="0">
+            </div>
+            <div class="slider-control">
+                <label for="ySlider">Количество:</label>
+                <input type="range" id="ySlider" min="0" max="100" value="0">
+            </div>
+        </div>
+    </div>
+    
+    <div class="top-items-container">
+        <div class="top-items-section">
+            <h3>Топ трекеров</h3>
+            <div id="topTrackers" class="top-items-list">
+                <div class="loading-placeholder">Загрузка...</div>
+            </div>
+        </div>
+        <div class="top-items-section">
+            <h3>Топ доменов</h3>
+            <div id="topDomains" class="top-items-list">
+                <div class="loading-placeholder">Загрузка...</div>
+            </div>
+        </div>
+    </div>
+</section>
+        </main>
+        
+        <footer class="app-footer">
+    <span id="lastUpdate" class="last-update">Последнее обновление: ...</span>
+    <div>
+        <a href="#" id="openStatistics" class="help-link">Статистика</a> | 
+        <a href="#" id="openHelp" class="help-link">Справка</a>
+    </div>
+</footer>
+    </div>
+    
+    <script src="chart.min.js"></script>
+    <script src="chartjs-plugin-zoom.min.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

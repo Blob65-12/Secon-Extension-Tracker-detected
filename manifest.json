@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "Трекер Приватности",
+  "version": "1.1.0",
+  "description": "Отслеживает сбор данных, блокирует трекеры и cookies, проверяет соответствие сайтов требованиям ФЗ №149.",
+  "permissions": [
+    "storage",
+    "cookies",
+    "scripting",
+    "tabs",
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "webNavigation",
+    "webRequest",
+    "notifications",
+    "geolocation"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; connect-src 'self' https://api.ipify.org;",
+    "content_scripts": "script-src 'self'; object-src 'none';"
+  },
+  "background": {
+    "service_worker": "background/background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_icon": {
+      "16": "assets/icon.png",
+      "48": "assets/icon.png",
+      "128": "assets/icon.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/html_analyzer.js",
+        "utils/visualization.js",
+        "popup/chart.min.js",
+        "popup/chartjs-plugin-zoom.min.js"
+      ],
+      "matches": [ "<all_urls>" ]
+    }
+  ],
+  "icons": {
+    "16": "assets/icon.png",
+    "48": "assets/icon.png",
+    "128": "assets/icon.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [ "<all_urls>" ],
+      "js": [ "content/html_analyzer.js", "content/content.js", "content/privacy-notice-analyzer.js" ]
+    },
+    {
+      "matches": [ "<all_urls>" ],
+      "js": [ "content/fingerprinting-protection.js" ],
+      "run_at": "document_start"
+    }
+  ]
+}
+
+
+
+
+
